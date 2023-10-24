@@ -35,7 +35,7 @@ struct HandleData {
 
             if (groupInformation.find("Group") != std::string::npos) {
                 if (!group->nameOfGroup.empty()) {
-                    Append(group);
+                    listOfGroup.push_back(group);
                 }
                 group = new Group(); // Create new group;
                 group->nameOfGroup = groupInformation;
@@ -45,65 +45,65 @@ struct HandleData {
             }
         }
         if (!group->nameOfGroup.empty()) {
-            Append(group);
+            listOfGroup.push_back(group);
         }
 
     }
     void InputInformation() {
         group = new Group();
         std::vector<std::string> nameOfStudentEnteredList;
-        int numberOfGroup = 0;
-        std::cout << "(!)Class already have " << listOfGroup.size() << " group. You must enter number of group larger than available number of group" << "\n";
-        while (numberOfGroup < listOfGroup.size()) {
-            std::cout << "(-)Enter number of group in the class: "; std::cin >> numberOfGroup;
+        int numberOfGroupAdded = 0;
+        std::cout << "(!)Class already have " << listOfGroup.size() << " groups." << "\n";
+        while (numberOfGroupAdded <= 0) {
+            std::cout << "(-)Enter number of groups in the class you want to add: "; std::cin >> numberOfGroupAdded;
             std::cout << "-------------------------------------------------------------\n";
-            if (numberOfGroup < listOfGroup.size()) {
-                std::cout << "(!) You entered number of group smaller than available number of group. Please re-enter\n";
+            if (numberOfGroupAdded <= 0) {
+                std::cout << "(!) You need to enter the number of added groups greater than 0 . Please re-enter\n";
             }
         }
-        for (int i = listOfGroup.size(); i < numberOfGroup; i++) {
+        int numberOfGroups = numberOfGroupAdded + listOfGroup.size();
+        for (int i = listOfGroup.size(); i < numberOfGroups; i++) {
             group->nameOfGroup = "Group " + std::to_string(i + 1);
             int numberOfStudentInAGroup = 0;
             std::cout << "Enter information of group " << i + 1 << "\n";
             while (numberOfStudentInAGroup <= 0) {
-                std::cout << "(-)Enter number of student if a group: "; std::cin >> numberOfStudentInAGroup;
+                std::cout << "(-)Enter number of students: "; std::cin >> numberOfStudentInAGroup;
+                if (numberOfStudentInAGroup <= 0) {
+                    std::cout << "(!) You need to enter the number of added students greater than 0. Please re-enter\n";
+                }
             }
             std::cin.ignore();
             for (int j = 0; j < numberOfStudentInAGroup; j++) {
                 std::string nameOfStudent = "";
-                bool isDuplicate = true;
-                while (isDuplicate) {
+                bool isDuplicate = false;
+                do {
+                    isDuplicate = false;
                     std::cout << "(-)Enter name of student number " << j + 1 << ": ";
-                    int checkIsDuplicate = 0;
                     std::getline(std::cin, nameOfStudent);
                     for (auto group : listOfGroup) {
                         for (auto& nameOfStudentInList : group->nameOfStudentList) {
                             if (nameOfStudentInList == nameOfStudent) {
                                 isDuplicate = true;
-                                checkIsDuplicate = 1;
                                 std::cout << "(!)Student already have in another group. Please re-enter\n";
                                 break;
                             }
                         }
-                        if (checkIsDuplicate == 1) {
+                        if (isDuplicate) {
                             break;
                         }
+                        
                     }
                     for (auto& nameOfStudentEntered : nameOfStudentEnteredList) {
                         if (nameOfStudentEntered == nameOfStudent) {
                             isDuplicate = true;
-                            checkIsDuplicate = 1;
                             std::cout << "(!)Student already have in another group. Please re-enter\n";
                         }
-                    }
-                    if (checkIsDuplicate == 0) {
-                        isDuplicate = false;
                     }
                     if (!isDuplicate) {
                         group->nameOfStudentList.push_back(nameOfStudent);
                         nameOfStudentEnteredList.push_back(nameOfStudent);
                     }
-                }
+                } while (isDuplicate);
             }
             std::cout << "-------------------------------------------------\n";
             listOfGroup.push_back(group);
@@ -129,29 +129,14 @@ struct HandleData {
             std::cout << "\n";
         }
     }
-    void Append(Group* group) {
-        listOfGroup.push_back(group);
-    }
+   
     //Option 2
     Project* project = new Project();
     std::vector<Project*> listOfProject;
-    void UpdateProjectInformation() {
-        
-    }
-    void DisplayInfProject() {
-        
-    }
-    void AppendProject(Project* project) {
-        listOfProject.push_back(project);
-    }
+    
     //Option 3
     Group::ProjectDateSubmitOfGroup* projectDateSubmitGroup = new Group::ProjectDateSubmitOfGroup();
-    void UpDateTimeToSubmit() {
-        
-    }
-    void DisplayDateOfSubmit() {
-        
-    }
+    
     // Option 4
     
     // Option 5
