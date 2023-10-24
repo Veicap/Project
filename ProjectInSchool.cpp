@@ -25,14 +25,13 @@ struct Project {
 struct HandleData {
     // Option 1:
     std::vector<Group*> listOfGroup;
-    Group* group = new Group();
-
+    Group* group = new Group(); //Dynamically allocated
+    // Read file text group.txt
     void ReadFile() {
-
         std::ifstream groupFile(FILE_NAME);
         std::string groupInformation;
+        // Read file
         while (std::getline(groupFile, groupInformation)) {
-
             if (groupInformation.find("Group") != std::string::npos) {
                 if (!group->nameOfGroup.empty()) {
                     listOfGroup.push_back(group);
@@ -49,19 +48,21 @@ struct HandleData {
         }
 
     }
+    // Input information and push data into vector listOfGroup
     void InputInformation() {
         group = new Group();
         std::vector<std::string> nameOfStudentEnteredList;
-        int numberOfGroupAdded = 0;
+        int numberOfGroupAdd = 0;
         std::cout << "(!)Class already have " << listOfGroup.size() << " groups." << "\n";
-        while (numberOfGroupAdded <= 0) {
-            std::cout << "(-)Enter number of groups in the class you want to add: "; std::cin >> numberOfGroupAdded;
+        // Enter number of group need to add until greater than 0
+        while (numberOfGroupAdd <= 0) {
+            std::cout << "(-)Enter number of groups in the class you want to add: "; std::cin >> numberOfGroupAdd;
             std::cout << "-------------------------------------------------------------\n";
-            if (numberOfGroupAdded <= 0) {
+            if (numberOfGroupAdd <= 0) {
                 std::cout << "(!) You need to enter the number of added groups greater than 0 . Please re-enter\n";
             }
         }
-        int numberOfGroups = numberOfGroupAdded + listOfGroup.size();
+        int numberOfGroups = numberOfGroupAdd + listOfGroup.size();
         for (int i = listOfGroup.size(); i < numberOfGroups; i++) {
             group->nameOfGroup = "Group " + std::to_string(i + 1);
             int numberOfStudentInAGroup = 0;
@@ -76,6 +77,7 @@ struct HandleData {
             for (int j = 0; j < numberOfStudentInAGroup; j++) {
                 std::string nameOfStudent = "";
                 bool isDuplicate = false;
+                // enter number of student until not duplicate
                 do {
                     isDuplicate = false;
                     std::cout << "(-)Enter name of student number " << j + 1 << ": ";
@@ -133,10 +135,8 @@ struct HandleData {
     //Option 2
     Project* project = new Project();
     std::vector<Project*> listOfProject;
-    
     //Option 3
-    Group::ProjectDateSubmitOfGroup* projectDateSubmitGroup = new Group::ProjectDateSubmitOfGroup();
-    
+    Group::ProjectDateSubmitOfGroup* projectDateSubmitGroup = new Group::ProjectDateSubmitOfGroup(); 
     // Option 4
     
     // Option 5
@@ -148,12 +148,11 @@ struct HandleData {
 };
 int main()
 {
-    HandleData* handleData = new HandleData();
+    HandleData* handleData = new HandleData(); // Dynamically allocated
     handleData->ReadFile();
     std::string option;
     while (true) {
         std::cout << "(1) Group Information\n";
-
         std::cout << "Enter your option: ";
         std::cin >> option;
         if (option == "1") {
@@ -173,9 +172,11 @@ int main()
             else if (optionOf1 == "3") {
                 handleData->SaveInformation();
             }
-        }
-        
-        
+        }  
+        std::cout << "(*)Press enter to back to menu...";
+       // std::cin.ignore();
+        std::getline(std::cin, option);
+        system("cls");
     }
 }
 
